@@ -1,30 +1,73 @@
 ---
-title: "measuring_justice"
+title: "Hass Avocado Analysis"
 author: "Jeremy Meguira"
-date: "October 8, 2018"
-output: html_document
+date: "October 9, 2018"
+output: 
+  html_document: 
+    fig_height: 10
+    fig_width: 10
+    toc: yes
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Hass Avocado Analysis
+This dataset was pulled from:
+https://www.kaggle.com/neuromusic/avocado-prices/home
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+It contains historical data on avocado prices and sales volume in multiple US
+markets.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+In this analysis I will look at the questions prompted by the poster,
+specifically:
 
-```{r cars}
+* How do the prices of avocados vary by region?
+* What happened to avocado prices and consumption in 2017?
+
+If any other interesting questions come up I will look into them as well.
+
+
+```{r echo = FALSE}
+
+library(ggplot2)
+library(knitr)
+library(GGally)
+library(gridExtra)
 
 ```
 
-## Including Plots
+## Load and Examine Dataset
 
-You can also embed plots, for example:
+```{r echo = FALSE, Loading_Data}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+av <- read.csv('avocado.csv')
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Variable descriptions are provided by the dataset poster:
+
+* Date - The date of the observation
+* AveragePrice - the average price of a single avocado
+* type - conventional or organic
+* year - the year
+* Region - the city or region of the observation
+* Total Volume - Total number of avocados sold
+* 4046 - Total number of avocados with PLU 4046 sold
+* 4225 - Total number of avocados with PLU 4225 sold
+* 4770 - Total number of avocados with PLU 4770 sold
+
+## Clean
+
+```{r}
+
+```
+
+## Explore
+
+```{r}
+
+```
+
