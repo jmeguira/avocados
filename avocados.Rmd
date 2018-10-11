@@ -55,19 +55,71 @@ Variable descriptions are provided by the dataset poster:
 * year - the year
 * Region - the city or region of the observation
 * Total Volume - Total number of avocados sold
-* 4046 - Total number of avocados with PLU 4046 sold
-* 4225 - Total number of avocados with PLU 4225 sold
-* 4770 - Total number of avocados with PLU 4770 sold
+* 4046 - Total number of avocados with PLU 4046 sold / small hass avocados
+* 4225 - Total number of avocados with PLU 4225 sold / large hass avocados
+* 4770 - Total number of avocados with PLU 4770 sold / x-large hass avocados
 
 ## Clean
 
-```{r}
+Check for duplicate rows
+
+```{r echo = FALSE}
+
+sum(duplicated(av))
 
 ```
+
+Check for missing values
+
+```{r echo = FALSE}
+
+sum(is.na(av))
+
+```
+
+Looks like a pretty clean data set. No missing values or duplicated rows. Now 
+let's look into the individual variables a bit
+
+```{r echo = FALSE}
+
+str(av)
+ 
+```
+
+The  year variable is redundant, as that information is already contained in the
+date variable, so we can drop it.
+
+```{r echo = FALSE}
+
+#https://stackoverflow.com/a/4605268
+
+drops <- c('year')
+av <- av[ , !names(av) %in% drops]
+str(av)
+
+
+```
+
+As we can see, date is currently of Factor type which is usually reserved for
+categorical data. I will change it to a date object
+
+```{r}
+
+av$Date <- as.Date(av$Date)
+str(av)
+ 
+```
+
+
+
+
+
 
 ## Explore
 
 ```{r}
+
+summary(av)
 
 ```
 
