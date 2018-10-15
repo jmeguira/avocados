@@ -21,11 +21,11 @@ https://www.kaggle.com/neuromusic/avocado-prices/home
 It contains historical data on avocado prices and sales volume in multiple US
 markets.
 
-In this analysis I will look at the questions prompted by the poster,
-specifically:
+Some questions I want to look at in this analysis:
 
 * How do the prices of avocados vary by region?
 * What happened to avocado prices and consumption in 2017?
+* How does consumption change based on organic/nonorganic avocados?
 
 If any other interesting questions come up I will look into them as well.
 
@@ -107,19 +107,30 @@ categorical data. I will change it to a date object
 
 av$Date <- as.Date(av$Date)
 str(av)
- 
+
+```
+
+Since we know the price of the average avocado at the date of the observation
+and the total # of avocados sold, we can create a new variable gross_sales to
+show the income for that day at each location purely from avocado sales.
+
+```{r}
+
+av$gross_sales <- av$Total.Volume * av$AveragePrice 
+summary(av$gross_sales)
+
 ```
 
 
-
-
-
-
 ## Explore
+
+
+Variable distribution:
 
 ```{r}
 
 summary(av)
 
 ```
+
 
