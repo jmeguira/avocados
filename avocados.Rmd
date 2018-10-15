@@ -25,7 +25,7 @@ Some questions I want to look at in this analysis:
 
 * How do the prices of avocados vary by region?
 * What happened to avocado prices and consumption in 2017?
-* How does consumption change based on organic/nonorganic avocados?
+* How does consumption/pricing change based on organic/conventional avocados?
 
 If any other interesting questions come up I will look into them as well.
 
@@ -106,13 +106,15 @@ categorical data. I will change it to a date object
 ```{r}
 
 av$Date <- as.Date(av$Date)
-str(av)
+str(av$Date)
 
 ```
 
 Since we know the price of the average avocado at the date of the observation
 and the total # of avocados sold, we can create a new variable gross_sales to
-show the income for that day at each location purely from avocado sales.
+show the income for that week at each location purely from avocado sales.
+
+Summary statistics for gross sales:
 
 ```{r}
 
@@ -133,4 +135,82 @@ summary(av)
 
 ```
 
+We can see that there are going to be some clear outliers in variables where the
+mean and max values are much higher than the 3rd quartile.
+
+```{r}
+
+ap1 <- ggplot(aes(y = av$AveragePrice), data = av) +
+  geom_boxplot(fill = 'orange') + 
+  ylab('Average Avocado Price')
+
+ap2 <- ggplot(aes(x = av$AveragePrice), data = av) +
+  geom_histogram(fill = 'orange')
+
+grid.arrange(ap1, ap2, ncol = 1)
+
+```
+
+Average price is fairly normally distributed and the bulk of the prices fall
+between $1 and $1.50. I'm realizing now that I should group the entire dataset
+by avocado type (organic vs conventional) as I suspect. We can drop the type
+variable from these new data subsets.
+
+```{r}
+
+av_org <- subset(av, av$type == 'organic')
+av_con <- subset(av, av$type == 'conventional')
+
+drops <- c('type')
+av_org <- av_org[ , !names(av_org) %in% drops]
+av_con <- av_con[ , !names(av_con) %in% drops]
+str(av_org)
+str(av_con)
+
+print('Total organic avocado sales:')
+sum(av_org$Total.Volume)
+print('Total conventional avocado sales')
+sum(av_con$Total.Volume)
+print('Organic percentage of total avocado sales:')
+(sum(av_org$Total.Volume)/sum(av$Total.Volume))*100
+
+print('Gross sales for organic avocados')
+sum(av_org$gross_sales)
+print('Gross sales for conventional avocados')
+sum(av_con$gross_sales)
+print('Organic percentage of gross avocado sales:')
+(sum(av_org$gross_sales)/sum(av$gross_sales))*100
+
+print('Average price of organic avocado:')
+mean(av_org$AveragePrice)
+print('Average price of conventional avocado:')
+mean(av_con$AveragePrice)
+
+```
+
+Great, so now we have the data subsets for organic and conventional avocados. We
+also learned that only about 3% of avocados sold are organic and they make up
+~4% of the gross avocado sales. Further, we can see that organic avocados are on
+average 50 cents more expensive per avocado. Now let's go back to the
+distributions and see how avocado type affects the charts.
+
+```{r}
+
+ap1_org <- ggplot(aes(y = av_org$AveragePrice), data = av$org) +
+  geom_boxplot(fill = 'orange') + 
+  ylab('Average Organic Avocado Price')
+
+ap2_org <- ggplot(aes(x = av_org$AveragePrice), data = av$org) +
+  geom_histogram(fill = 'orange')
+
+ap1_con <- ggplot(aes(y = av_con$AveragePrice), data = av$con) +
+  geom_boxplot(fill = 'orange') + 
+  ylab('Average Conventional Avocado Price')
+
+ap2_con <- ggplot(aes(x = av_con$AveragePrice), data = av$con) +
+  geom_histogram(fill = 'orange')
+
+grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2) 
+
+```
 
