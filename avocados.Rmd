@@ -214,3 +214,37 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```
 
+```{r}
+
+p1 <- ggplot(aes(x = av$X4046), data = av) +
+  geom_histogram(fill = 'orange') +
+  ggtitle('x4046 histogram') +
+  coord_cartesian(xlim = c(0, quantile(av$X4046,.90)))
+
+p2 <- ggplot(aes(x = av$X4225), data = av) +
+  geom_histogram(fill = 'orange') +
+  ggtitle('x4225 histogram') +
+  coord_cartesian(xlim = c(0, quantile(av$X4225,.90)))
+
+p3 <- ggplot(aes(x = av$X4770), data = av) +
+  geom_histogram(fill = 'orange') +
+  ggtitle('x4770 histogram') +
+  coord_cartesian(xlim = c(0, quantile(av$X4770,.98)))
+
+grid.arrange(p1,p2,p3, ncol = 1)
+```
+
+
+```{r}
+
+ggplot(aes(x = Date, y = Total.Volume), data = av) + 
+  geom_bar(stat = 'identity')
+
+ggplot(aes(x = Date, y = gross_sales), data = av) + 
+  geom_bar(stat = 'identity')
+
+
+
+```
+
+
