@@ -103,9 +103,9 @@ str(av)
 As we can see, date is currently of Factor type which is usually reserved for
 categorical data. I will change it to a date object
 
-```{r}
+```{r echo = FALSE}
 
-av$Date <- as.Date(av$Date)
+av$Date <- as.POSIXct(av$Date)
 str(av$Date)
 
 ```
@@ -116,12 +116,30 @@ show the income for that week at each location purely from avocado sales.
 
 Summary statistics for gross sales:
 
-```{r}
+```{r echo = FALSE}
 
 av$gross_sales <- av$Total.Volume * av$AveragePrice 
 summary(av$gross_sales)
 
 ```
+
+```{r}
+
+unique(av$region)
+
+```
+
+
+```{r}
+av_total <- subset(av, av$region == "TotalUS")
+
+region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West')
+av_regional <- subset(av, av$region %in% region_list)
+region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West', 'TotalUS')
+av_city <- subset(av, !(av$region %in% region_list))
+
+```
+
 
 
 ## Explore
@@ -129,7 +147,7 @@ summary(av$gross_sales)
 
 Variable distribution:
 
-```{r}
+```{r echo = FALSE}
 
 summary(av)
 
@@ -138,7 +156,7 @@ summary(av)
 We can see that there are going to be some clear outliers in variables where the
 mean and max values are much higher than the 3rd quartile.
 
-```{r}
+```{r echo = FALSE}
 
 ap1 <- ggplot(aes(y = av$AveragePrice), data = av) +
   geom_boxplot(fill = 'orange') + 
@@ -156,7 +174,7 @@ between $1 and $1.50. I'm realizing now that I should group the entire dataset
 by avocado type (organic vs conventional) as I suspect. We can drop the type
 variable from these new data subsets.
 
-```{r}
+```{r echo = FALSE}
 
 av_org <- subset(av, av$type == 'organic')
 av_con <- subset(av, av$type == 'conventional')
@@ -194,7 +212,7 @@ also learned that only about 3% of avocados sold are organic and they make up
 average 50 cents more expensive per avocado. Now let's go back to the
 distributions and see how avocado type affects the charts.
 
-```{r}
+```{r echo = FALSE}
 
 ap1_org <- ggplot(aes(y = av_org$AveragePrice), data = av$org) +
   geom_boxplot(fill = 'orange') + 
@@ -214,7 +232,7 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```
 
-```{r}
+```{r echo = FALSE}
 
 p1 <- ggplot(aes(x = av$X4046), data = av) +
   geom_histogram(fill = 'orange') +
@@ -232,16 +250,18 @@ p3 <- ggplot(aes(x = av$X4770), data = av) +
   coord_cartesian(xlim = c(0, quantile(av$X4770,.98)))
 
 grid.arrange(p1,p2,p3, ncol = 1)
+ 
 ```
 
 
-```{r}
+```{r echo = FALSE}
 
-ggplot(aes(x = Date, y = Total.Volume), data = av) + 
-  geom_bar(stat = 'identity')
+ggplot(aes(x = Date, y = Total.Volume), data = av_total) + 
+  geom_point(stat = 'identity')
 
-ggplot(aes(x = Date, y = gross_sales), data = av) + 
-  geom_bar(stat = 'identity')
+ggplot(aes(x = Date, y = gross_sales), data = av_total) + 
+  geom_jitter(stat = 'identity') +
+  scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
 
 
