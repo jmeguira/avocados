@@ -256,10 +256,10 @@ grid.arrange(p1,p2,p3, ncol = 1)
 
 ```{r echo = FALSE}
 
-ggplot(aes(x = Date, y = Total.Volume), data = av_total) + 
+ggplot(aes(x = Date, y = Total.Volume, color = type), data = av_total) + 
   geom_point(stat = 'identity')
 
-ggplot(aes(x = Date, y = gross_sales), data = av_total) + 
+ggplot(aes(x = Date, y = gross_sales, color = type), data = av_city) + 
   geom_jitter(stat = 'identity') +
   scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
