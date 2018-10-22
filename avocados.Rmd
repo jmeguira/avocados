@@ -123,20 +123,25 @@ summary(av$gross_sales)
 
 ```
 
-```{r}
+```{r echo = FALSE}
 
 unique(av$region)
 
 ```
 
 
-```{r}
-av_total <- subset(av, av$region == "TotalUS")
+```{r echo = FALSE}
+
+av_total_org <- subset(av, av$region == "TotalUS" & av$type == "organic")
+av_total_con <- subset(av, av$region == "TotalUS" & av$type == "conventional")
 
 region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West')
-av_regional <- subset(av, av$region %in% region_list)
+av_regional_org <- subset(av, av$region %in% region_list & av$type == "organic")
+av_regional_con <- subset(av, av$region %in% region_list & av$type == "conventional")
+
 region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West', 'TotalUS')
-av_city <- subset(av, !(av$region %in% region_list))
+av_city_org <- subset(av, !(av$region %in% region_list) & av$type == "organic")
+av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "conventional")
 
 ```
 
@@ -176,15 +181,6 @@ variable from these new data subsets.
 
 ```{r echo = FALSE}
 
-av_org <- subset(av, av$type == 'organic')
-av_con <- subset(av, av$type == 'conventional')
-
-drops <- c('type')
-av_org <- av_org[ , !names(av_org) %in% drops]
-av_con <- av_con[ , !names(av_con) %in% drops]
-str(av_org)
-str(av_con)
-
 print('Total organic avocado sales:')
 sum(av_org$Total.Volume)
 print('Total conventional avocado sales')
@@ -214,18 +210,18 @@ distributions and see how avocado type affects the charts.
 
 ```{r echo = FALSE}
 
-ap1_org <- ggplot(aes(y = av_org$AveragePrice), data = av$org) +
+ap1_org <- ggplot(aes(y = av_total_org$AveragePrice), data = av_total_org) +
   geom_boxplot(fill = 'orange') + 
   ylab('Average Organic Avocado Price')
 
-ap2_org <- ggplot(aes(x = av_org$AveragePrice), data = av$org) +
+ap2_org <- ggplot(aes(x = av_total_org$AveragePrice), data = av_total_org) +
   geom_histogram(fill = 'orange')
 
-ap1_con <- ggplot(aes(y = av_con$AveragePrice), data = av$con) +
+ap1_con <- ggplot(aes(y = av_total_con$AveragePrice), data = av_total_con) +
   geom_boxplot(fill = 'orange') + 
   ylab('Average Conventional Avocado Price')
 
-ap2_con <- ggplot(aes(x = av_con$AveragePrice), data = av$con) +
+ap2_con <- ggplot(aes(x = av_total_con$AveragePrice), data = av_total_con) +
   geom_histogram(fill = 'orange')
 
 grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2) 
@@ -256,11 +252,14 @@ grid.arrange(p1,p2,p3, ncol = 1)
 
 ```{r echo = FALSE}
 
-ggplot(aes(x = Date, y = Total.Volume, color = type), data = av_total) + 
+ggplot(aes(x = Date, y = Total.Volume), data = av_total_con) + 
   geom_point(stat = 'identity')
 
-ggplot(aes(x = Date, y = gross_sales, color = type), data = av_city) + 
-  geom_jitter(stat = 'identity') +
+ggplot(aes(x = Date, y = Total.Volume), data = av_total_org) +
+  geom_point(stat = 'identity')
+
+ggplot(aes(x = Date, y = gross_sales, color = type), data = subset(av_city, av_city$type == 'conventional')) + 
+  geom_jitter(stat = 'summary', fun.y = mean) +
   scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
 
