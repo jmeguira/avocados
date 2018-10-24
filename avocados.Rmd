@@ -142,11 +142,11 @@ unique(av$region)
 av_total_org <- subset(av, av$region == "TotalUS" & av$type == "organic")
 av_total_con <- subset(av, av$region == "TotalUS" & av$type == "conventional")
 
-region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West')
+region_list <- list('GreatLakes','Midsouth', 'Northeast','NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West')
 av_regional_org <- subset(av, av$region %in% region_list & av$type == "organic")
 av_regional_con <- subset(av, av$region %in% region_list & av$type == "conventional")
 
-region_list <- list('Midsouth', 'Northeast', 'NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West', 'TotalUS')
+region_list <- list('GreatLakes','Midsouth', 'Northeast','NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West', 'TotalUS')
 av_city_org <- subset(av, !(av$region %in% region_list) & av$type == "organic")
 av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "conventional")
 
@@ -157,13 +157,27 @@ av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "convention
 ## Explore
 
 
-Variable distribution:
 
 ```{r echo = FALSE}
 
-summary(av_total_org)
+print('Total organic avocado sales:')
+sum(av_total_org$Total.Volume)
+print('Total conventional avocado sales:')
+sum(av_total_con$Total.Volume)
+
+print('Gross sales for organic avocados:')
+sum(av_total_org$gross_sales)
+print('Gross sales for conventional avocados:')
+sum(av_total_con$gross_sales)
+
+print('Average price of organic avocado:')
+mean(av_total_org$AveragePrice)
+print('Average price of conventional avocado:')
+mean(av_total_con$AveragePrice)
 
 ```
+
+Avocado total price distribution:
 
 ```{r echo = FALSE}
 
@@ -178,8 +192,7 @@ grid.arrange(ap1, ap2, ncol = 1)
 
 ```
 
-We can see that organic avocados are on average 50 cents more expensive per avocado.
-Now let's go back to the distributions and see how avocado type affects the charts.
+Price distribution by avocado type:
 
 ```{r echo = FALSE}
 
@@ -204,36 +217,6 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```{r echo = FALSE}
 
-print('Total organic avocado sales:')
-sum(av_org$Total.Volume)
-print('Total conventional avocado sales')
-sum(av_con$Total.Volume)
-print('Organic percentage of total avocado sales:')
-(sum(av_org$Total.Volume)/sum(av$Total.Volume))*100
-
-print('Gross sales for organic avocados')
-sum(av_org$gross_sales)
-print('Gross sales for conventional avocados')
-sum(av_con$gross_sales)
-print('Organic percentage of gross avocado sales:')
-(sum(av_org$gross_sales)/sum(av$gross_sales))*100
-
-print('Average price of organic avocado:')
-mean(av_org$AveragePrice)
-print('Average price of conventional avocado:')
-mean(av_con$AveragePrice)
-
-```
-
-Great, so now we have the data subsets for organic and conventional avocados. We
-also learned that only about 3% of avocados sold are organic and they make up
-~4% of the gross avocado sales. Further, 
-
-```
-
-
-```{r echo = FALSE}
-
 ggplot(aes(x = Date, y = Total.Volume), data = av_total_con) + 
   geom_point(stat = 'identity')
 
@@ -246,4 +229,15 @@ ggplot(aes(x = Date, y = gross_sales, color = type), data = subset(av_city, av_c
 
 ```
 
+```{r echo = FALSE}
+
+hist_columns = function (df, region){
+    ggplot(data = subset(df, df$Region == region),
+           aes_string(x = Date, y = Total.Volume)) +
+    geom_histogram(fill = "orange",
+           bins = 30) +
+    xlab(column)
+}
+
+```
 
