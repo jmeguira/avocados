@@ -214,16 +214,28 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```
 
-TotalUS Plots
+Total US Plots Conventional
 
-```{r}
+```{r echo = FALSE}
+
+```
+
+Total US Plots Organic
+
+```{r echo = FALSE}
 
 ```
 
 
-Regional Plots
+Regional Plots Conventional
 
-```{r}
+```{r echo = FALSE}
+
+```
+
+Regional Plots Organic
+
+```{r echo = FALSE}
 
 ```
 
@@ -232,32 +244,50 @@ City Plots Conventional
 
 ```{r echo = FALSE}
 
-ggplot(aes(x = Date, y = Total.Volume), data = av_total_con) + 
-  geom_point(stat = 'identity')
-
-ggplot(aes(x = Date, y = Total.Volume), data = av_total_org) +
-  geom_point(stat = 'identity')
-
-ggplot(aes(x = Date, y = Total.Volume, color = 'orange' ), data = av_city_con) + 
-  geom_point(stat = 'summary', fun.y = mean) +
+cpc1 <- ggplot(aes(x = Date, y = Total.Volume), data = av_city_con) + 
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
   stat_smooth(method = 'lm', color = 'blue') +
-  coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9)))
+  coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9))) +
+  ggtitle('Mean Volume of Conventional Avocado Sales Over Time (city data)')
   #scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
-ggplot(aes(x = Date, y = AveragePrice, color = 'orange'), data = av_city_con) + 
-  geom_point(stat = 'summary', fun.y = mean) +
-  stat_smooth(method = 'lm', color = 'blue')
+cpc2 <- ggplot(aes(x = Date, y = AveragePrice, color = 'orange'), data = av_city_con) + 
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
+  stat_smooth(method = 'lm', color = 'blue') +
+  ggtitle('Mean Price of Conventional Avocados Over Time (city data)')
   #coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9)))
 
-ggplot(aes(x = Date, y = gross_sales, color = 'orange'), data = av_city_con) +
-  geom_point(stat = 'summary', fun.y = mean) +
-  stat_smooth(method = 'lm', color = 'blue')
+cpc3 <- ggplot(aes(x = Date, y = gross_sales, color = 'orange'), data = av_city_con) +
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
+  stat_smooth(method = 'lm', color = 'blue') +
+  ggtitle('Mean Gross Sales of Conventional Avocados Over Time (city data)')
 
-ggplot(aes(x = Date, y = AveragePrice, color = ))
+grid.arrange(cpc1, cpc2, cpc3, ncol = 1)
+
 ```
+
+City Plots Organic
 
 ```{r echo = FALSE}
 
+cpo1 <- ggplot(aes(x = Date, y = Total.Volume), data = av_city_org) + 
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
+  stat_smooth(method = 'lm', color = 'blue') +
+  ggtitle('Mean Volume of Organic Avocado Sales Over Time (city data)')
+  #scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
+
+cpo2 <- ggplot(aes(x = Date, y = AveragePrice, color = 'orange'), data = av_city_org) + 
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
+  stat_smooth(method = 'lm', color = 'blue') +
+  ggtitle('Mean Price of Organic Avocados Over Time (city data)')
+  #coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9)))
+
+cpo3 <- ggplot(aes(x = Date, y = gross_sales, color = 'orange'), data = av_city_org) +
+  geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
+  stat_smooth(method = 'lm', color = 'blue') +
+  ggtitle('Mean Gross Sales of Organic Avocado Over Time (city data)')
+
+grid.arrange(cpo1, cpo2, cpo3, ncol = 1)
 
 ```
 
