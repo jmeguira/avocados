@@ -36,6 +36,7 @@ library(ggplot2)
 library(knitr)
 library(GGally)
 library(gridExtra)
+library(dygraphs)
 
 ```
 
@@ -231,11 +232,45 @@ Regional Plots Conventional
 
 ```{r echo = FALSE}
 
+rpc1 <- ggplot(aes(x = Date, y = Total.Volume, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "conventional")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Consumption Over Time')
+
+rpc2 <- ggplot(aes(x = Date, y = AveragePrice, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "conventional")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Prices Over Time')
+
+rpc3 <- ggplot(aes(x = Date, y = gross_sales, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "conventional")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Gross Sales Over Time')
+
+grid.arrange(rpc1, rpc2, rpc3, ncol = 1)
+
 ```
 
 Regional Plots Organic
 
 ```{r echo = FALSE}
+
+rpo1 <- ggplot(aes(x = Date, y = Total.Volume, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "organic")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Consumption Over Time')
+
+rpo2 <- ggplot(aes(x = Date, y = AveragePrice, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "organic")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Prices Over Time')
+
+rpo3 <- ggplot(aes(x = Date, y = gross_sales, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "organic")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Gross Sales Over Time')
+
+grid.arrange(rpo1, rpo2, rpo3, ncol = 1)
 
 ```
 
