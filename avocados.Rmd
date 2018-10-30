@@ -214,6 +214,21 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```
 
+TotalUS Plots
+
+```{r}
+
+```
+
+
+Regional Plots
+
+```{r}
+
+```
+
+
+City Plots Conventional
 
 ```{r echo = FALSE}
 
@@ -223,21 +238,26 @@ ggplot(aes(x = Date, y = Total.Volume), data = av_total_con) +
 ggplot(aes(x = Date, y = Total.Volume), data = av_total_org) +
   geom_point(stat = 'identity')
 
-ggplot(aes(x = Date, y = gross_sales, color = type), data = subset(av_city, av_city$type == 'conventional')) + 
-  geom_jitter(stat = 'summary', fun.y = mean) +
-  scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
+ggplot(aes(x = Date, y = Total.Volume, color = 'orange' ), data = av_city_con) + 
+  geom_point(stat = 'summary', fun.y = mean) +
+  stat_smooth(method = 'lm', color = 'blue') +
+  coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9)))
+  #scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
+ggplot(aes(x = Date, y = AveragePrice, color = 'orange'), data = av_city_con) + 
+  geom_point(stat = 'summary', fun.y = mean) +
+  stat_smooth(method = 'lm', color = 'blue')
+  #coord_cartesian(ylim = c(300000, quantile(av_city_con$Total.Volume,.9)))
+
+ggplot(aes(x = Date, y = gross_sales, color = 'orange'), data = av_city_con) +
+  geom_point(stat = 'summary', fun.y = mean) +
+  stat_smooth(method = 'lm', color = 'blue')
+
+ggplot(aes(x = Date, y = AveragePrice, color = ))
 ```
 
 ```{r echo = FALSE}
 
-hist_columns = function (df, region){
-    ggplot(data = subset(df, df$Region == region),
-           aes_string(x = Date, y = Total.Volume)) +
-    geom_histogram(fill = "orange",
-           bins = 30) +
-    xlab(column)
-}
 
 ```
 
