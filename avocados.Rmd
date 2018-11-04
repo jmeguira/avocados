@@ -178,6 +178,51 @@ mean(av_total_con$AveragePrice)
 
 ```
 
+
+How do the prices of avocados vary by region?
+
+
+```{r echo = FALSE}
+
+#https://stackoverflow.com/a/25664367
+p1<- ggplot(aes(x = reorder(region, -AveragePrice), y = AveragePrice), data = av_regional_con) +
+  geom_bar(stat = 'summary', fun.y = mean) +
+  xlab('Region') +
+  ggtitle('Average Conventional Avocado Price by Region')
+
+p2<- ggplot(aes(x = Date, y = AveragePrice, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "conventional")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Conventional Avocado Prices Over Time')
+
+p3<- ggplot(aes(x = reorder(region, -AveragePrice), y = AveragePrice), data = av_regional_org) +
+  geom_bar(stat = 'summary', fun.y = mean) +
+  xlab('Region') +
+  ggtitle('Average Organic Avocado Price by Region')
+  
+p4<- ggplot(aes(x = Date, y = AveragePrice, color = region),
+  data = subset(av, av$region %in% region_list & av$type == "organic")) + 
+  geom_line(stat = 'identity', size = 1) +
+  ggtitle('Regional Organic Avocado Prices Over Time')
+  
+grid.arrange(p1,p2,p3,p4, ncol=2)
+
+```
+
+By city?
+
+```{r echo = FALSE}
+
+ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice), data = av_city_org) +
+  geom_bar(stat = 'summary', fun.y = mean) +
+  xlab('City') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle('Average Organic Avocado Price by City') +
+  coord_flip()
+```
+
+
+
 Avocado total price distribution:
 
 ```{r echo = FALSE}
@@ -309,7 +354,6 @@ cpo1 <- ggplot(aes(x = Date, y = Total.Volume), data = av_city_org) +
   geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
   stat_smooth(method = 'lm', color = 'blue') +
   ggtitle('Mean Volume of Organic Avocado Sales Over Time (city data)')
-  #scale_x_datetime(limits = c(as.POSIXct("2017-01-01"), as.POSIXct("2018-01-01")))
 
 cpo2 <- ggplot(aes(x = Date, y = AveragePrice, color = 'orange'), data = av_city_org) + 
   geom_point(stat = 'summary', fun.y = mean, color = 'orange') +
@@ -325,4 +369,17 @@ cpo3 <- ggplot(aes(x = Date, y = gross_sales, color = 'orange'), data = av_city_
 grid.arrange(cpo1, cpo2, cpo3, ncol = 1)
 
 ```
+
+```{r}
+
+#https://stackoverflow.com/a/25664367
+ggplot(aes(x = reorder(region, -AveragePrice), y = AveragePrice), data = av_regional_con) +
+  geom_bar(stat = 'summary', fun.y = mean)
+
+ggplot(aes(x = reorder(region, -Total.Volume), y = Total.Volume), data = av_regional_con) +
+  geom_bar(stat = 'summary', fun.y = mean)
+
+
+```
+
 
