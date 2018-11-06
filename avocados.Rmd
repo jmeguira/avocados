@@ -18,16 +18,13 @@ knitr::opts_chunk$set(echo = FALSE)
 This dataset was pulled from:
 https://www.kaggle.com/neuromusic/avocado-prices/home
 
-It contains historical data on avocado prices and sales volume in multiple US
-markets.
+It contains historical data on avocado prices and sales volume in a variety of
+US markets.
 
 Some questions I want to look at in this analysis:
 
 * How do the prices of avocados vary by region?
 * What happened to avocado prices and consumption in 2017?
-* How does consumption/pricing change based on organic/conventional avocados?
-
-If any other interesting questions come up I will look into them as well.
 
 
 ```{r echo = FALSE}
@@ -36,7 +33,6 @@ library(ggplot2)
 library(knitr)
 library(GGally)
 library(gridExtra)
-library(dygraphs)
 
 ```
 
@@ -161,20 +157,31 @@ av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "convention
 
 ```{r echo = FALSE}
 
-print('Total organic avocado sales:')
-sum(av_total_org$Total.Volume)
-print('Total conventional avocado sales:')
-sum(av_total_con$Total.Volume)
+ap1_org <- ggplot(aes(y = AveragePrice), data = subset(av, type == 'organic')) +
+  geom_boxplot(fill = 'orange') + 
+  scale_y_continuous(breaks = seq(0,3.5,.25)) +
+  ylab('Average Price') +
+  ggtitle('Organic Avocado Boxplot')
 
-print('Gross sales for organic avocados:')
-sum(av_total_org$gross_sales)
-print('Gross sales for conventional avocados:')
-sum(av_total_con$gross_sales)
+ap2_org <- ggplot(aes(x = AveragePrice), data = subset(av, type == 'organic')) +
+  geom_histogram(fill = 'orange') +
+  scale_y_continuous(breaks = seq(0,1000,100)) + 
+  scale_x_continuous(breaks = seq(0,3.25,.5)) +
+  ggtitle('Organic Avocado Histogram')
 
-print('Average price of organic avocado:')
-mean(av_total_org$AveragePrice)
-print('Average price of conventional avocado:')
-mean(av_total_con$AveragePrice)
+ap1_con <- ggplot(aes(y = AveragePrice), data = subset(av, type == 'conventional')) +
+  geom_boxplot(fill = 'orange') + 
+  scale_y_continuous(breaks = seq(0,2.5,.25)) +
+  ylab('Average Price') +
+  ggtitle('Conventional Avocado Boxplot')
+
+ap2_con <- ggplot(aes(x = AveragePrice), data = subset(av, type == 'conventional')) +
+  geom_histogram(fill = 'orange') +
+  scale_y_continuous(breaks = seq(0,800,100)) +
+  scale_x_continuous(breaks = seq(0,2.25,.25)) +
+  ggtitle('Conventional Avocado Histogram')
+
+grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2) 
 
 ```
 
@@ -183,12 +190,12 @@ How do the prices of avocados vary by region?
 
 ```{r echo = FALSE}
 
-ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice, color = type), data = av) +
+ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice, fill = type), data = av) +
   geom_bar(stat = 'summary', fun.y = mean, position = 'dodge') +
   xlab('City') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ggtitle('Average Avocado Price by Region') +
-  scale_y_continuous(breaks=seq(0,2.5,.25))+
+  scale_y_continuous(breaks=seq(0,2.5,.25)) +
   coord_flip()
 
 ```
@@ -244,6 +251,8 @@ ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice), data = av_city_
 
 
 ```
+
+
 
 
 
