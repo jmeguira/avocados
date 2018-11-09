@@ -201,7 +201,7 @@ production and distribution chains are not nearly as robust. For these reasons
 and more, we should expect that the organic avocados are in general more
 expensive.
 
-How do the prices of avocados vary by region?
+### How do the prices of avocados vary by region?
 
 ```{r echo = FALSE}
 
@@ -222,7 +222,7 @@ lower prices.
 
 
 
-By region groupings?
+### By region groupings?
 
 ```{r echo = FALSE}
 
@@ -252,7 +252,7 @@ grid.arrange(p3,p4, ncol=1)
 
 ```
 
-By city?
+### By city?
 
 ```{r echo = FALSE}
 
@@ -274,25 +274,6 @@ p2<- ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice), data = av_
 
 grid.arrange(p1,p2, ncol = 2) 
 
-
-```
-
-
-
-
-
-Avocado total price distribution:
-
-```{r echo = FALSE}
-
-ap1 <- ggplot(aes(y = AveragePrice), data = av) +
-  geom_boxplot(fill = 'orange') + 
-  ylab('Average Avocado Price')
-
-ap2 <- ggplot(aes(x = AveragePrice), data = av) +
-  geom_histogram(fill = 'orange')
-
-grid.arrange(ap1, ap2, ncol = 1)
 
 ```
 
