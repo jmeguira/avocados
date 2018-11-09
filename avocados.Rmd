@@ -120,12 +120,13 @@ summary(av$gross_sales)
 
 ```
 
-After some exploration, I realized that it didn't make sense to chart
-organic and conventional avocados together and that I had to breakup the dataset
-by region in order to create graphs that made sense. I will create a subset
-for the TotalUS region, the larger regions that encompass more than one state 
-(e.g.: 'Midsouth', 'Northeast'), and individual cities. These will be subset one
-more time by avocado type.
+After some exploration, I realized that it didn't make sense to chart organic
+and conventional avocados together as their sales numbers are orders of
+magnitude apart. I broke up the dataset by region in order to create graphs that
+made sense. I will create a subset for the TotalUS region, the larger regions
+that encompass more than one state (e.g.: 'Midsouth', 'Northeast'), and
+individual cities. Below is a list of the unique regions included in this
+dataset.
 
 ```{r echo = FALSE}
 
@@ -138,14 +139,18 @@ unique(av$region)
 
 av_total_org <- subset(av, av$region == "TotalUS" & av$type == "organic")
 av_total_con <- subset(av, av$region == "TotalUS" & av$type == "conventional")
+av_total <- subset(av, av$region == "TotalUS")
 
 region_list <- list('GreatLakes','Midsouth', 'Northeast','NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West')
 av_regional_org <- subset(av, av$region %in% region_list & av$type == "organic")
 av_regional_con <- subset(av, av$region %in% region_list & av$type == "conventional")
+av_regional <- subset(av, av$region %in% region_list)
 
 region_list <- list('GreatLakes','Midsouth', 'Northeast','NorthernNewEngland','West', 'SouthCentral', 'Southeast','Plains', 'West', 'TotalUS')
 av_city_org <- subset(av, !(av$region %in% region_list) & av$type == "organic")
 av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "conventional")
+av_city <- subset(av, !(av$region %in% region_list))
+
 
 ```
 
@@ -155,7 +160,7 @@ av_city_con <- subset(av, !(av$region %in% region_list) & av$type == "convention
 
 
 
-```{r echo = FALSE}
+```{r echo = FALSE, warning = FALSE}
 
 ap1_org <- ggplot(aes(y = AveragePrice), data = subset(av, type == 'organic')) +
   geom_boxplot(fill = 'orange') + 
@@ -185,6 +190,16 @@ grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)
 
 ```
 
+We can see in the chart above that the median price of organic avocados is ~50
+cents higher than conventional avocados. The price distributions for both
+organic and conventional avocados are normally distributed.
+
+People choose to buy organic avocados over conventional for a variety of
+reasons, but some of the reasons contribute to an increase in prices. There is
+typically a higher production cost associated with organic foods and the
+production and distribution chains are not nearly as robust. For these reasons
+and more, we should expect that the organic avocados are in general more
+expensive.
 
 How do the prices of avocados vary by region?
 
@@ -199,6 +214,13 @@ ggplot(aes(x = reorder(region, AveragePrice), y = AveragePrice, fill = type), da
   coord_flip()
 
 ```
+
+Reported statistics say that the majority of avocados consumed in the U.S. are produced
+either in Mexico or California. Based on that information, I would expect that regions
+along the southern and western US borders have the lowest distribution costs and therefore
+lower prices. 
+
+
 
 By region groupings?
 
