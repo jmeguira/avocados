@@ -201,6 +201,25 @@ production and distribution chains are not nearly as robust. For these reasons
 and more, we should expect that the organic avocados are in general more
 expensive.
 
+Now let's take a look at the average avocado price over time and see if there
+are any trends.
+
+```{r}
+
+p1 <- ggplot(aes(x = Date, y = AveragePrice, color = type), data = subset(av, region != 'TotalUS')) +
+   geom_line(stat = 'summary', fun.y = mean, size = 1)
+
+p2 <- ggplot(aes(x = Date, y = Total.Volume), data = subset(av, type == 'conventional' & region != 'TotalUS')) +
+  geom_line(stat = 'summary', fun.y = mean)
+
+p3 <- ggplot(aes(x = Date, y = Total.Volume), data = subset(av, type == 'organic' & region != 'TotalUS')) +
+  geom_line(stat = 'summary', fun.y = mean)
+
+grid.arrange(p1,p2,p3,ncol = 1)
+
+```
+
+
 ### How do the prices of avocados vary by region?
 
 ```{r echo = FALSE}
