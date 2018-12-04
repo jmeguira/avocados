@@ -186,7 +186,7 @@ ap2_con <- ggplot(aes(x = AveragePrice), data = subset(av, type == 'conventional
   scale_x_continuous(breaks = seq(0,2.25,.25)) +
   ggtitle('Conventional Avocado Histogram')
 
-grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2) 
+suppressMessages(grid.arrange(ap1_org, ap2_org, ap1_con, ap2_con, ncol = 2)) 
 
 ```
 
@@ -204,21 +204,28 @@ expensive.
 Now let's take a look at the average avocado price over time and see if there
 are any trends.
 
-```{r}
+```{r echo = False}
 
-p1 <- ggplot(aes(x = Date, y = AveragePrice, color = type), data = subset(av, region != 'TotalUS')) +
-   geom_line(stat = 'summary', fun.y = mean, size = 1)
+ggplot(aes(x = Date, y = AveragePrice, color = type), data = subset(av, region != 'TotalUS')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Price by Avocado Type Over Time')   
 
 p2 <- ggplot(aes(x = Date, y = Total.Volume), data = subset(av, type == 'conventional' & region != 'TotalUS')) +
-  geom_line(stat = 'summary', fun.y = mean)
+  geom_line(stat = 'summary', fun.y = mean) +
+  ggtitle('Average Regional Conventional Avocado Sales Over Time')
 
 p3 <- ggplot(aes(x = Date, y = Total.Volume), data = subset(av, type == 'organic' & region != 'TotalUS')) +
-  geom_line(stat = 'summary', fun.y = mean)
+  geom_line(stat = 'summary', fun.y = mean) +
+  ggtitle('Average Regional Organic Avocado Sales over Time')
 
-grid.arrange(p1,p2,p3,ncol = 1)
+grid.arrange(p2,p3,ncol = 1)
 
 ```
 
+We can see in these graphs that there is a cyclical trend that has emerged for the price of avocados
+regardless of type. The average price of avocados dip around the new year and are most expensive
+during the summer. This also corresponds to a yearly increase in avocado consumption around
+the new year.
 
 ### How do the prices of avocados vary by region?
 
