@@ -263,7 +263,7 @@ produced either in Mexico or California. Based on that information, I would
 expect that regions along the southern and western US borders have the lowest
 distribution costs and therefore lower prices.
 
-```{r}
+```{r echo = FALSE}
 
 #https://stackoverflow.com/a/25664367
 p1 <- ggplot(aes(x = reorder(region, -AveragePrice), y = AveragePrice), data = av_regional_con) +
@@ -289,4 +289,48 @@ price whereas the North-East and New England regions have the highest. I would
 also guess that avocado availability is less sensitive to the seasonal changes
 in the south and west. This combined with the price discrepancy probably
 contributes significantly to these regions high average sales volumes.
+
+
+## Random Analysis
+
+
+Sales of Conventional Avocados by Size Classification
+
+```{r echo = FALSE}
+
+p1 <- ggplot(aes(x = Date, y = X4046), data = subset(av, region == 'TotalUS' & type == 'conventional')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4046 (small) Conventional Avocados Type Over Time')
+
+p2 <- ggplot(aes(x = Date, y = X4225), data = subset(av, region = 'TotalUS' & type == 'conventional')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4225 (medium) Conventional Avocados Type Over Time')   
+
+p3 <- ggplot(aes(x = Date, y = X4770), data = subset(av, region = 'TotalUS' & type == 'conventional')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4770 (large) Conventional Avocados Type Over Time')
+
+grid.arrange(p1,p2,p3, ncol = 1)
+
+```
+
+```{r}
+
+p1 <- ggplot(aes(x = Date, y = X4046), data = subset(av, region == 'TotalUS' & type == 'organic')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4046 (small) Organic Avocados Type Over Time')
+
+p2 <- ggplot(aes(x = Date, y = X4225), data = subset(av, region = 'TotalUS' & type == 'organic')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4225 (medium) Organic Avocados Type Over Time')   
+
+p3 <- ggplot(aes(x = Date, y = X4770), data = subset(av, region = 'TotalUS' & type == 'organic')) +
+  geom_line(stat = 'summary', fun.y = mean, size = 1) +
+  ggtitle('Average Sales of X4770 (large) Organic Avocados Type Over Time')
+
+grid.arrange(p1,p2,p3, ncol = 1)
+
+
+```
+
 
